@@ -31,10 +31,12 @@ const Payment = types
         firstName: types.string,
         lastName: types.string,
         errors: Errors,
+        dirty: types.boolean
     })
     .actions(self => ({
         updateFormInput(key, value) {
             self[key] = value
+            self.dirty = true
         },
         submitForm() {
             console.log(getSnapshot(self))
@@ -42,7 +44,7 @@ const Payment = types
     }))
     .views(self => ({
         get isValid() {
-            return Object.values(self.errors).every(v => v === '');
+            return self.dirty && Object.values(self.errors).every(v => v === '');
 
         }
     }));

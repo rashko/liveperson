@@ -17,6 +17,7 @@ const store = Store.create({
             firstName: '',
             lastName: '',
         },
+        dirty: false
     }
 });
 ReactDOM.render(<App store={store}/>, document.getElementById('root'));
