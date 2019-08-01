@@ -1,7 +1,8 @@
 import {types, typecheck, getSnapshot} from "mobx-state-tree";
 
 const validators = {
-    firstName: types.refinement(types.string, value => value.length > 5),
+    billingAddress: types.refinement(types.string, value => value.length > 5),
+    country: types.refinement(types.string, value => value.length > 0),
     lastName: types.refinement(types.string, value => value.length > 5)
 }
 
@@ -17,7 +18,8 @@ export const validate = (validatorName, value) => {
 
 const Errors = types
     .model("Errors", {
-        firstName: types.string,
+        billingAddress: types.string,
+        country: types.string,
         lastName: types.string,
     })
     .actions(self => ({
@@ -28,7 +30,8 @@ const Errors = types
 
 const Payment = types
     .model("Payment", {
-        firstName: types.string,
+        billingAddress: types.string,
+        country: types.string,
         lastName: types.string,
         errors: Errors,
         dirty: types.boolean

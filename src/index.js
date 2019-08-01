@@ -11,11 +11,13 @@ const Store = types.model("Store", {
 
 const store = Store.create({
     payment: {
-        firstName: '',
+        billingAddress: '',
+        country: '',
         lastName: '',
         errors: {
-            firstName: '',
+            billingAddress: '',
             lastName: '',
+            country: '',
         },
         dirty: false
     }
