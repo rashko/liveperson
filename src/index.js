@@ -12,7 +12,11 @@ const Store = types.model("Store", {
 const store = Store.create({
     payment: {
         firstName: '',
-        lastName: ''
+        lastName: '',
+        errors: {
+            firstName: '',
+            lastName: '',
+        },
     }
 });
 ReactDOM.render(<App store={store}/>, document.getElementById('root'));

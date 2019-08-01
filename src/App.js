@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {observer} from "mobx-react"
+import {validate} from './payment';
 
 const Button = styled.button`
   background: #F26D32;
@@ -60,11 +61,28 @@ const Form = styled.form`
     padding: 10px;  
 `;
 
+const Error = styled.span`
+    color: #cc0000;
+    font-size: 0.9em;
+    font-weight: bold;
+`;
+
 const App = observer(props => {
     const {store} = props;
     const handelFormInput = (e) => {
-        store.payment.updateFormInput(e.target.name, e.target.value)
+        const {name, value} = e.target;
+        const error = validate(name, value) ? '' : `${name} is invalid`;
+        store.payment.updateFormInput(name, value);
+        store.payment.errors.updateFormError(name, error)
+
     };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (store.payment.isValid) {
+            store.payment.submitForm()
+        }
+    }
     return (
         <div className="App">
             <header>
@@ -72,13 +90,14 @@ const App = observer(props => {
                     <Row>
                         <Label>first name</Label>
                         <Input name={'firstName'} value={store.payment.firstName} onChange={handelFormInput}/>
+                        <Error>{store.payment.errors.firstName}</Error>
                     </Row>
                     <Row>
                         <Label>last name</Label>
-                        <Input name={'lastName'} value={store.payment.lastName}
-                               onChange={handelFormInput}/>
+                        <Input name={'lastName'} value={store.payment.lastName} onChange={handelFormInput}/>
+                        <Error>{store.payment.errors.lastName}</Error>
                     </Row>
-                    <Button onClick={store.payment.submitForm}>Send</Button>
+                    <Button onClick={handleSubmit}>Send</Button>
                 </Form>
             </header>
         </div>
