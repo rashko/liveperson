@@ -2,11 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
+import {types} from "mobx-state-tree";
+import Payment from './payment';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const Store = types.model("Store", {
+    payment: Payment
+});
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const store = Store.create({
+    payment: {
+        firstName: '',
+        lastName: ''
+    }
+});
+ReactDOM.render(<App store={store}/>, document.getElementById('root'));
+
+
