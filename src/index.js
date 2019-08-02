@@ -13,11 +13,12 @@ const store = Store.create({
     payment: {
         billingAddress: '',
         country: '',
-        lastName: '',
+        ccNumber: null,
         errors: {
             billingAddress: '',
             lastName: '',
             country: '',
+            ccNumber: '',
         },
         dirty: false
     }
