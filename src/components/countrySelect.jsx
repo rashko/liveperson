@@ -23,7 +23,6 @@ class CountrySelect extends React.Component {
         value={value}
         onChange={onHandleChange}
       >
-        <option value={""} />
         {this.getOptions()}
       </Select>
     );

@@ -20,10 +20,10 @@ const SelectComponent = (props) => {
     return (
         <Select
           name={props.name}
-          placeholder={props.placeholder}
           value={props.value}
           onChange={props.onChange}
         >
+            <option>{props.placeholder}</option>
           {props.children}
         </Select>
       );

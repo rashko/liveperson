@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import { validate, validate2 } from "../payment";
+import { validate } from "../helpers/validator";
 import CountrySelect from "./countrySelect";
 import Row from "./row";
 import Button from "./button";
@@ -11,6 +11,8 @@ import Error from "./error";
 import InputWrapper from "./inputWrapper";
 import CreditCardLogo from './CreditCardLogo';
 import getCreditCardType from '../helpers/cardTypeHelper';
+import Select from './select';
+
 const Form = styled.form`
   padding: 10px;
 `;
@@ -21,7 +23,7 @@ const FormComponent = observer(props => {
   const handelFormInput = e => {
     const { name, value } = e.target;
     // const error = validate(name, value) ? "" : `${name} is invalid`;
-    const errors = validate2(name, value);
+    const errors = validate(name, value);
     store.payment.updateFormInput(name, value);
     store.payment.errors.updateFormError(name, errors.join(', '));
   };
@@ -36,7 +38,7 @@ const FormComponent = observer(props => {
       }
     }
   };
-
+  const creditCardType = getCreditCardType(store.payment.ccNumber);
   return (
     <Form>
       <Row>
@@ -68,9 +70,33 @@ const FormComponent = observer(props => {
           />
           <Error>{store.payment.errors.ccNumber}</Error>
         </InputWrapper>
-        <CreditCardLogo type={getCreditCardType(store.payment.ccNumber)} />
+        {creditCardType !== 'unknown' && <CreditCardLogo type={creditCardType} />}
       </Row>
-      <Button onClick={handleSubmit}>Send</Button>
+      <Row>
+        <Label />
+        <InputWrapper>
+          <Select name="ccMonth" placeholder={'Select expiry month'} value={store.payment.ccMonth}
+            onChange={handelFormInput}>
+            {[1,2,3,4,5,6,7,8,9,10,11,12].map(value => <option value={value}>{value}</option>)}
+          </Select>
+          <Error>{store.payment.errors.ccMonth}</Error>
+        </InputWrapper>
+        <InputWrapper>
+          <Select name="ccYear" placeholder={'Select expiry year'} value={store.payment.ccYear}>
+            {[1,2,3,4,5,6,7,8,9,10,11,12].map(value => <option value={value}>{value}</option>)}
+          </Select>
+          <Error>{store.payment.errors.ccYear}</Error>
+        </InputWrapper>
+        <InputWrapper>
+          <Input
+            name={"ccCvv"}
+            value={store.payment.ccCvv}
+            onChange={handelFormInput}
+          />
+          <Error>{store.payment.errors.ccCvv}</Error>
+        </InputWrapper>
+      </Row>
+      <Button onClick={handleSubmit}>Submit Payment</Button>
     </Form>
   );
 });
