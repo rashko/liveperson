@@ -7,7 +7,7 @@ const Row = styled.div`
   @media (max-width: 768px) {
     flex-direction: column;
     align-items: strech;
-    padding: 12px 0;
+    padding: 0;
   }
 
   @media (min-width: 769px) {

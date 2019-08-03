@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { observer } from "mobx-react";
-import { validate } from "../helpers/validator";
+import { validate, validateExpiry } from "../helpers/validator";
 import CountrySelect from "./countrySelect";
 import Row from "./row";
 import Button from "./button";
@@ -28,8 +28,15 @@ const FormComponent = observer(props => {
 
   const handelFormInput = e => {
     const { name, value } = e.target;
-    const errors = validate(name, value);
     payment.updateFormInput(name, value);
+
+    const errors = validate(name, value);
+    if(name === 'ccMonth' || name === 'ccYear'){
+      const expiryError = validateExpiry(payment.ccMonth, payment.ccYear);
+      if(expiryError !== ''){
+        errors.push(expiryError);
+      }
+    }
     payment.errors.updateFormError(name, errors.join(", "));
   };
 

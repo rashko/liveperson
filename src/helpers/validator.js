@@ -3,8 +3,7 @@ import getCreditCardType from "./cardTypeHelper";
 const required = value => value && value !== "";
 const isNumber = value => !isNaN(value);
 const isValidCC = value => getCreditCardType(value) !== "unknown";
-const minLength = (length, value) => value.length >= length;
-const maxLength = (length, value) => value.length < length;
+const exactLenght = (length, value) => value.length === length;
 
 const validator = {
   billingAddress: {
@@ -16,16 +15,29 @@ const validator = {
     messeges: [`Country is required`]
   },
   ccNumber: {
-    rules: [required, isNumber, isValidCC],
+    rules: [required, isNumber, isValidCC, exactLenght.bind(this, 16)],
     messeges: [
       `Credit card number is required`,
       `Credit card number must be a number`,
-      `Credit card number is not valid`
+      `Credit card number is not valid`,
+      `Credit card number must be 16 characters length`
     ]
   },
+  ccMonth: {
+    rules: [required],
+    messeges: [`Expiry month is required`]
+  },
+  ccYear: {
+    rules: [required],
+    messeges: [`Expiry year is required`]
+  },
   ccCvv: {
-    rules: [required, isNumber, minLength.bind(this, 3)],
-    messeges: [`CVV is required`,`CVV must be a number`, `CVV minimum length 3 character`]
+    rules: [required, isNumber, exactLenght.bind(this, 3)],
+    messeges: [
+      `CVV is required`,
+      `CVV must be a number`,
+      `CVV must be 3 characters length`
+    ]
   }
 };
 
@@ -43,3 +55,11 @@ export const validate = (validatorName, value) => {
 
   return errors;
 };
+
+export const validateExpiry = (month, year) => {
+  const d = new Date();
+  const currentYear = d.getFullYear();
+  const currentMonth = d.getMonth();
+  return parseInt(year) === currentYear && parseInt(month) < currentMonth + 1 ? 'Expiry date is invalid' : '';
+};
+
