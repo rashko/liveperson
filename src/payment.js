@@ -1,5 +1,5 @@
 import { types, getSnapshot } from "mobx-state-tree";
-
+import { makePayment } from "./services/payment";
 const Errors = types
   .model("Errors", {
     billingAddress: types.string,
@@ -20,12 +20,15 @@ const Payment = types
   .model("Payment", {
     billingAddress: types.string,
     country: types.string,
-    ccNumber: types.maybeNull(types.string),
+    ccNumber: types.string,
     ccMonth: types.string,
     ccYear: types.string,
     ccCvv: types.string,
     errors: Errors,
-    dirty: types.boolean
+    dirty: types.boolean,
+    success: types.boolean,
+    sending: types.boolean,
+    progress: types.number,
   })
   .actions(self => ({
     updateFormInput(key, value) {
@@ -33,7 +36,31 @@ const Payment = types
       self.dirty = true;
     },
     submitForm() {
-      console.log(getSnapshot(self));
+      self.sending = true;
+      makePayment(self)
+        .then(() => self.updateSuccess(true))
+        .catch(() => self.updateSuccess(true));
+    },
+    updateSuccess(flag) {
+      self.success = flag;
+      self.sending = false;
+    },
+    increaseProgress(){
+        let interval;
+        const limit = 3;
+        let counter = 0;
+        interval = setInterval(() => {
+            self.updateProgress(self.progress + 100/limit)
+            counter++;
+            console.log(self.progress)
+            console.log(counter)
+            if(counter === limit){
+                clearInterval(interval)
+            }
+        }, 1000)
+    },
+    updateProgress(value){
+        self.progress = value;
     }
   }))
   .views(self => ({

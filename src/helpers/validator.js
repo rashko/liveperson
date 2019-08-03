@@ -4,6 +4,7 @@ const required = value => value && value !== "";
 const isNumber = value => !isNaN(value);
 const isValidCC = value => getCreditCardType(value) !== "unknown";
 const minLength = (length, value) => value.length >= length;
+const maxLength = (length, value) => value.length < length;
 
 const validator = {
   billingAddress: {

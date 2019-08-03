@@ -9,36 +9,72 @@ import Input from "./input";
 import Label from "./label";
 import Error from "./error";
 import InputWrapper from "./inputWrapper";
-import CreditCardLogo from './CreditCardLogo';
-import getCreditCardType from '../helpers/cardTypeHelper';
-import Select from './select';
+import CreditCardLogo from "./CreditCardLogo";
+import getCreditCardType from "../helpers/cardTypeHelper";
+import Select from "./select";
+import SuccessMessege from "./successMessege";
+import ProgressBar from "./progressBar";
 
 const Form = styled.form`
   padding: 10px;
+  background: #ccc;
+  border-radius: 5px;
+  width: 90%;
+  margin: 0 auto;
 `;
 
 const FormComponent = observer(props => {
-  const { store } = props;
+  const { payment } = props.store;
 
   const handelFormInput = e => {
     const { name, value } = e.target;
-    // const error = validate(name, value) ? "" : `${name} is invalid`;
     const errors = validate(name, value);
-    store.payment.updateFormInput(name, value);
-    store.payment.errors.updateFormError(name, errors.join(', '));
+    payment.updateFormInput(name, value);
+    payment.errors.updateFormError(name, errors.join(", "));
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (store.payment.isValid) {
-      try {
-        store.payment.submitForm();
-      } catch(e){
-        console.error(e);
-      }
+    if (payment.isValid) {
+        payment.increaseProgress();
+        payment.submitForm();
     }
   };
-  const creditCardType = getCreditCardType(store.payment.ccNumber);
+  const creditCardType = getCreditCardType(payment.ccNumber);
+
+  const months = () => {
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
+    return Array(12)
+      .fill(1)
+      .map((value, index) => {
+        const d = new Date();
+        d.setMonth(index);
+        return { value: index + 1, name: monthNames[index] };
+      });
+  };
+
+  const years = () => {
+    const d = new Date();
+    const year = d.getFullYear();
+    const years = [];
+    for (let i = 0; i < 8; i++) {
+      years.push(year + i);
+    }
+    return years;
+  };
   return (
     <Form>
       <Row>
@@ -47,17 +83,17 @@ const FormComponent = observer(props => {
           <Input
             name={"billingAddress"}
             placeholder={"Street address"}
-            value={store.payment.billingAddress}
+            value={payment.billingAddress}
             onChange={handelFormInput}
           />
-          <Error>{store.payment.errors.billingAddress}</Error>
+          <Error>{payment.errors.billingAddress}</Error>
         </InputWrapper>
         <InputWrapper>
           <CountrySelect
             onHandleChange={handelFormInput}
-            value={store.payment.country}
+            value={payment.country}
           />
-          <Error>{store.payment.errors.country}</Error>
+          <Error>{payment.errors.country}</Error>
         </InputWrapper>
       </Row>
       <Row>
@@ -65,38 +101,63 @@ const FormComponent = observer(props => {
         <InputWrapper>
           <Input
             name={"ccNumber"}
-            value={store.payment.ccNumber}
+            placeholder={"Credit card number"}
+            value={payment.ccNumber}
             onChange={handelFormInput}
           />
-          <Error>{store.payment.errors.ccNumber}</Error>
+          <Error>{payment.errors.ccNumber}</Error>
         </InputWrapper>
-        {creditCardType !== 'unknown' && <CreditCardLogo type={creditCardType} />}
+        {creditCardType !== "unknown" && (
+          <CreditCardLogo type={creditCardType} />
+        )}
       </Row>
       <Row>
         <Label />
         <InputWrapper>
-          <Select name="ccMonth" placeholder={'Select expiry month'} value={store.payment.ccMonth}
-            onChange={handelFormInput}>
-            {[1,2,3,4,5,6,7,8,9,10,11,12].map(value => <option value={value}>{value}</option>)}
+          <Select
+            name="ccMonth"
+            placeholder={"Select expiry month"}
+            value={payment.ccMonth}
+            onChange={handelFormInput}
+          >
+            {months().map(month => (
+              <option key={month.value} value={month.value}>
+                {month.value} - {month.name}
+              </option>
+            ))}
           </Select>
-          <Error>{store.payment.errors.ccMonth}</Error>
+          <Error>{payment.errors.ccMonth}</Error>
         </InputWrapper>
         <InputWrapper>
-          <Select name="ccYear" placeholder={'Select expiry year'} value={store.payment.ccYear}>
-            {[1,2,3,4,5,6,7,8,9,10,11,12].map(value => <option value={value}>{value}</option>)}
+          <Select
+            name="ccYear"
+            placeholder={"Select expiry year"}
+            value={payment.ccYear}
+            onChange={handelFormInput}
+          >
+            {years().map(value => (
+              <option key={value} value={value}>
+                {value}
+              </option>
+            ))}
           </Select>
-          <Error>{store.payment.errors.ccYear}</Error>
+          <Error>{payment.errors.ccYear}</Error>
         </InputWrapper>
         <InputWrapper>
           <Input
             name={"ccCvv"}
-            value={store.payment.ccCvv}
+            placeholder={"CVV"}
+            value={payment.ccCvv}
             onChange={handelFormInput}
           />
-          <Error>{store.payment.errors.ccCvv}</Error>
+          <Error>{payment.errors.ccCvv}</Error>
         </InputWrapper>
       </Row>
-      <Button onClick={handleSubmit}>Submit Payment</Button>
+      <Row action={"action"}>
+        <Button onClick={handleSubmit}>Submit Payment</Button>
+        {payment.success && <SuccessMessege />}
+        {payment.sending && <ProgressBar label={'processing payment'} max={100} value={payment.progress} />}
+      </Row>
     </Form>
   );
 });

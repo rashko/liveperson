@@ -11,12 +11,12 @@ const Store = types.model("Store", {
 
 const store = Store.create({
   payment: {
-    billingAddress: "",
-    country: "",
-    ccNumber: "",
-    ccMonth: "",
-    ccYear: "",
-    ccCvv: "",
+    billingAddress: "sdkjfskjf",
+    country: "IL",
+    ccNumber: "5326",
+    ccMonth: "12",
+    ccYear: "2020",
+    ccCvv: "444",
     errors: {
       billingAddress: "",
       lastName: "",
@@ -26,7 +26,10 @@ const store = Store.create({
       ccYear: "",
       ccCvv: ""
     },
-    dirty: false
+    dirty: true,
+    success: false,
+    sending: false,
+    progress: 0
   }
 });
 ReactDOM.render(<App store={store} />, document.getElementById("root"));

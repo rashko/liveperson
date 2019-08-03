@@ -3,13 +3,13 @@ import styled from 'styled-components';
 
 const Row = styled.div`
   display: flex;
-  padding: 8px 0;
+  padding: ${props => props.action ? '12px 108px' : '12px 0'};
   position: relative;
-  align-items: flex-start;
+  align-items:  ${props => props.action ? 'center' : 'flex-start'};
 `;
 
 const RowComponent = (props) => {
-    return <Row>{props.children}</Row>
+    return <Row {...props}>{props.children}</Row>
 }
 
 export default RowComponent;

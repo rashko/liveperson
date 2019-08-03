@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const Button = styled.button`
   background: #f26d32;
@@ -14,10 +14,13 @@ const Button = styled.button`
     background: #fff;
     color: #f26d32;
   }
+  &:focus {
+    outline: 0;
+  }
 `;
 
-const ButtonComponent = (props) => {
-    return <Button onClick={props.onClick}>{props.children}</Button>
-}
+const ButtonComponent = props => {
+  return <Button onClick={props.onClick}>{props.children}</Button>;
+};
 
 export default ButtonComponent;
