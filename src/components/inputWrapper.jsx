@@ -7,7 +7,9 @@ const InputWrapper = styled.div`
   padding: 0 10px;
   flex-direction: column;
   justify-content: flex-start;
-
+  @media (max-width: 768px) {
+    padding: 10px 0;
+  }
 `;
 
 const InputWrapperComponent = (props) => {

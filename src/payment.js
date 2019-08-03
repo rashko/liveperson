@@ -37,6 +37,8 @@ const Payment = types
     },
     submitForm() {
       self.sending = true;
+      self.progress = 0;
+      self.success = false;
       makePayment(self)
         .then(() => self.updateSuccess(true))
         .catch(() => self.updateSuccess(true));

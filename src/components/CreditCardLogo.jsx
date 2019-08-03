@@ -14,6 +14,7 @@ background: url(${props => {
 }}) top center no-repeat;
 width: 48px;
 height: 48px;
+background-position-y: -10px;
 `;
 
 const CreditCardLogo = (props) => {

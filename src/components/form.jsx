@@ -36,8 +36,8 @@ const FormComponent = observer(props => {
   const handleSubmit = e => {
     e.preventDefault();
     if (payment.isValid) {
-        payment.increaseProgress();
-        payment.submitForm();
+      payment.increaseProgress();
+      payment.submitForm();
     }
   };
   const creditCardType = getCreditCardType(payment.ccNumber);
@@ -156,7 +156,13 @@ const FormComponent = observer(props => {
       <Row action={"action"}>
         <Button onClick={handleSubmit}>Submit Payment</Button>
         {payment.success && <SuccessMessege />}
-        {payment.sending && <ProgressBar label={'processing payment'} max={100} value={payment.progress} />}
+        {payment.sending && (
+          <ProgressBar
+            label={"processing payment"}
+            max={100}
+            value={payment.progress}
+          />
+        )}
       </Row>
     </Form>
   );

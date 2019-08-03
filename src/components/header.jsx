@@ -9,30 +9,29 @@ const Header = styled.div`
   justify-content: flex-start;
 `;
 const Logo = styled.div`
-@media (max-width: 768px) {
+  @media (max-width: 768px) {
     background: url(${logo}) center left no-repeat;
     background-size: 180px;
-  height: 52px;
-  width: 180px;
-}
+    height: 52px;
+    width: 180px;
+  }
 
-@media (min-width: 769px) {
+  @media (min-width: 769px) {
     background: url(${logo}) top left no-repeat;
-  height: 52px;
-  width: 268px;
-}
-
+    height: 52px;
+    width: 268px;
+  }
 `;
 
 const Title = styled.div`
-@media (max-width: 768px) {
-    font-size:1.3em;
+  @media (max-width: 768px) {
+    font-size: 1.3em;
     padding: 0 5px;
-}
-@media (min-width: 769px) {
-    font-size:2em;
+  }
+  @media (min-width: 769px) {
+    font-size: 2em;
     padding: 0 10px;
-}
+  }
 `;
 const HeaderComponent = () => {
   return (

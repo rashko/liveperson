@@ -10,6 +10,7 @@ const Button = styled.button`
   border: 2px solid #f26d32;
   border-radius: 3px;
   transition: all 0.3s;
+  white-space: nowrap;
   &:hover {
     background: #fff;
     color: #f26d32;
