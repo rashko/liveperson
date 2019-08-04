@@ -21,7 +21,7 @@ const Button = styled.button`
 `;
 
 const ButtonComponent = props => {
-  return <Button onClick={props.onClick}>{props.children}</Button>;
+  return <Button {...props}>{props.children}</Button>;
 };
 
 export default ButtonComponent;

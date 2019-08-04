@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { NavLink } from "react-router-dom";
 import logo from "../assets/liveperson.png";
 const Header = styled.div`
   background: #ccc;
@@ -9,6 +10,7 @@ const Header = styled.div`
   justify-content: flex-start;
 `;
 const Logo = styled.div`
+  cursor: pointer;
   @media (max-width: 768px) {
     background: url(${logo}) center left no-repeat;
     background-size: 180px;
@@ -37,7 +39,7 @@ const HeaderComponent = () => {
   return (
     <Header>
       <Title>Liveperson</Title>
-      <Logo />
+      <NavLink to={'/'}><Logo /></NavLink>
     </Header>
   );
 };

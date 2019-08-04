@@ -51,6 +51,10 @@ const Payment = types
     updatePaymentError(messege){
         self.payentError = messege
     },
+    updateSending(flag){
+        self.sending = flag;
+        self.dirty = true;
+    },
     updateSuccess(flag) {
       self.success = flag;
       self.sending = false;

@@ -46,6 +46,21 @@ const FormComponent = observer(props => {
 
   const handleSubmit = e => {
     e.preventDefault();
+    payment.updateSending(true);
+    const form = {
+      billingAddress: payment.billingAddress,
+      country: payment.country,
+      ccNumber: payment.ccNumber,
+      ccMonth: payment.ccMonth,
+      ccYear: payment.ccYear,
+      ccCvv: payment.ccCvv
+    };
+    for (let input in form) {
+      const errors = validate(input, form[input]);
+      if (errors.length > 0) {
+        payment.errors.updateFormError(input, errors.join(", "));
+      }
+    }
     if (payment.isValid) {
       payment.increaseProgress();
       payment
@@ -137,7 +152,9 @@ const FormComponent = observer(props => {
           </InputWrapper>
         </Row>
         <Row action={"action"}>
-          <Button onClick={handleSubmit}>Submit Payment</Button>
+          <Button onClick={handleSubmit} disabled={payment.sending}>
+            Submit Payment
+          </Button>
           {payment.success && <SuccessMessege />}
           {payment.sending && (
             <ProgressBar

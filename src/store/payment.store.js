@@ -7,12 +7,12 @@ const Store = types.model("Store", {
 
 const store = Store.create({
   payment: {
-    billingAddress: "sdkjfskjf",
-    country: "IL",
-    ccNumber: "5326",
-    ccMonth: "12",
-    ccYear: "2020",
-    ccCvv: "444",
+    billingAddress: "",
+    country: "",
+    ccNumber: "",
+    ccMonth: "",
+    ccYear: "",
+    ccCvv: "",
     errors: {
       billingAddress: "",
       lastName: "",
@@ -22,11 +22,11 @@ const store = Store.create({
       ccYear: "",
       ccCvv: ""
     },
-    dirty: true,
+    dirty: false,
     success: false,
     sending: false,
     progress: 0,
-    payentError: ''
+    payentError: ""
   }
 });
 

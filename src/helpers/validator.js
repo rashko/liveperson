@@ -41,6 +41,17 @@ const validator = {
   }
 };
 
+export const validateForm = form => {
+  const errors = {};
+  for (let field in form) {
+    const fieldErrors = validate(field, form[field]);
+    if (fieldErrors.length > 0) {
+      errors[field] = fieldErrors;
+    }
+  }
+  return errors;
+};
+
 export const validate = (validatorName, value) => {
   const field = validator[validatorName];
   const errors = [];
@@ -60,6 +71,7 @@ export const validateExpiry = (month, year) => {
   const d = new Date();
   const currentYear = d.getFullYear();
   const currentMonth = d.getMonth();
-  return parseInt(year) === currentYear && parseInt(month) < currentMonth + 1 ? 'Expiry date is invalid' : '';
+  return parseInt(year) === currentYear && parseInt(month) < currentMonth + 1
+    ? "Expiry date is invalid"
+    : "";
 };
-
