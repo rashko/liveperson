@@ -14,13 +14,13 @@ const store = Store.create({
     ccYear: "",
     ccCvv: "",
     errors: {
-      billingAddress: "",
-      lastName: "",
-      country: "",
-      ccNumber: "",
-      ccMonth: "",
-      ccYear: "",
-      ccCvv: ""
+      billingAddress:[],
+      lastName: [],
+      country: [],
+      ccNumber: [],
+      ccMonth: [],
+      ccYear: [],
+      ccCvv: []
     },
     dirty: false,
     success: false,

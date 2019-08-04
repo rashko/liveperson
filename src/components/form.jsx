@@ -41,7 +41,7 @@ const FormComponent = observer(props => {
         errors.push(expiryError);
       }
     }
-    payment.errors.updateFormError(name, errors.join(", "));
+    payment.errors.updateFormError(name, errors);
   };
 
   const handleSubmit = e => {
@@ -58,7 +58,7 @@ const FormComponent = observer(props => {
     for (let input in form) {
       const errors = validate(input, form[input]);
       if (errors.length > 0) {
-        payment.errors.updateFormError(input, errors.join(", "));
+        payment.errors.updateFormError(input, errors);
       }
     }
     if (payment.isValid) {
@@ -67,6 +67,8 @@ const FormComponent = observer(props => {
         .submitForm()
         .then(() => history.push("/success"))
         .catch(() => history.push("/fail"));
+    } else {
+      payment.updateSending(false);
     }
   };
   const creditCardType = getCreditCardType(payment.ccNumber);

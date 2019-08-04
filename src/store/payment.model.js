@@ -2,13 +2,13 @@ import { types } from "mobx-state-tree";
 import { makePayment } from "../services/payment";
 const Errors = types
   .model("Errors", {
-    billingAddress: types.string,
-    country: types.string,
-    lastName: types.string,
-    ccNumber: types.string,
-    ccMonth: types.string,
-    ccYear: types.string,
-    ccCvv: types.string
+    billingAddress: types.array(types.string),
+    country: types.array(types.string),
+    lastName: types.array(types.string),
+    ccNumber: types.array(types.string),
+    ccMonth: types.array(types.string),
+    ccYear: types.array(types.string),
+    ccCvv: types.array(types.string)
   })
   .actions(self => ({
     updateFormError(key, value) {
@@ -78,7 +78,7 @@ const Payment = types
   .views(self => ({
     get isValid() {
       return (
-        self.dirty && Object.values(self.errors).every(value => value === "")
+        self.dirty && Object.values(self.errors).every(value => value.length === 0)
       );
     }
   }));

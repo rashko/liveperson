@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const Error = styled.span`
   color: #cc0000;
@@ -7,8 +7,8 @@ const Error = styled.span`
   font-weight: bold;
 `;
 
-const ErrorComponent = (props) => {
-    return <Error>{props.children}</Error>
-}
+const ErrorComponent = props => {
+  return <Error>{props.children.join(", ")}</Error>;
+};
 
 export default ErrorComponent;
