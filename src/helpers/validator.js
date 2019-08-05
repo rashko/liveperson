@@ -1,11 +1,12 @@
 import getCreditCardType from "./cardTypeHelper";
+import * as validator from './validator';
 
-const required = value => value && value !== "";
-const isNumber = value => !isNaN(value);
-const isValidCC = value => getCreditCardType(value) !== "unknown";
-const exactLenght = (length, value) => value.length === length;
+export const required = value => (typeof(value) === "number" || typeof(value) === "string") && value !== "";
+export const isNumber = value => (typeof(value) === "number" || typeof(value) === "string") && !isNaN(value);
+export const isValidCC = value => getCreditCardType(value) !== "unknown";
+export const exactLength = (length, value) => typeof(value) === "string" && typeof(length) === "number" && value.length === length;
 
-const validator = {
+export const validatorRules = {
   billingAddress: {
     rules: [required],
     messeges: [`Billing address is required`]
@@ -15,7 +16,7 @@ const validator = {
     messeges: [`Country is required`]
   },
   ccNumber: {
-    rules: [required, isNumber, isValidCC, exactLenght.bind(this, 16)],
+    rules: [required, isNumber, isValidCC, exactLength.bind(this, 16)],
     messeges: [
       `Credit card number is required`,
       `Credit card number must be a number`,
@@ -32,7 +33,7 @@ const validator = {
     messeges: [`Expiry year is required`]
   },
   ccCvv: {
-    rules: [required, isNumber, exactLenght.bind(this, 3)],
+    rules: [required, isNumber, exactLength.bind(this, 3)],
     messeges: [
       `CVV is required`,
       `CVV must be a number`,
@@ -41,19 +42,8 @@ const validator = {
   }
 };
 
-export const validateForm = form => {
-  const errors = {};
-  for (let field in form) {
-    const fieldErrors = validate(field, form[field]);
-    if (fieldErrors.length > 0) {
-      errors[field] = fieldErrors;
-    }
-  }
-  return errors;
-};
-
-export const validate = (validatorName, value) => {
-  const field = validator[validatorName];
+export const validate = (validatorName, value, rules = validatorRules) => {
+  const field = rules[validatorName];
   const errors = [];
   if (!field) {
     return errors;
@@ -67,11 +57,11 @@ export const validate = (validatorName, value) => {
   return errors;
 };
 
-export const validateExpiry = (month, year) => {
-  const d = new Date();
-  const currentYear = d.getFullYear();
-  const currentMonth = d.getMonth();
-  return parseInt(year) === currentYear && parseInt(month) < currentMonth + 1
+export const validateExpiry = (month, year, now = new Date()) => {
+  if((now) instanceof Date === false){
+    return "Expiry date is invalid"
+  }
+  return parseInt(year) === now.getFullYear() && parseInt(month) < now.getMonth() + 1
     ? "Expiry date is invalid"
     : "";
 };
